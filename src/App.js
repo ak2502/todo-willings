@@ -9,6 +9,7 @@ const App = () => {
   const [showComplete, setShowComplete] = useState([]);
   var submit = false;
 
+
 // for todos
   useEffect(() => {
     const json = localStorage.getItem("todos");
@@ -22,6 +23,7 @@ const App = () => {
     const json = JSON.stringify(todos);
     localStorage.setItem("todos", json);
   }, [todos]);
+
 
 // for completed todos
   useEffect(() => {
@@ -37,6 +39,22 @@ const App = () => {
     localStorage.setItem("completedTodos", json);
   }, [completedTodos]);
 
+
+  // for completed todos which have to be shown
+  useEffect(() => {
+    const json = localStorage.getItem("showComplete");
+    const loadedTodos = JSON.parse(json);
+    if (loadedTodos) {
+      setShowComplete(loadedTodos);
+    }
+  }, []);
+
+  useEffect(() => {
+    const json = JSON.stringify(showComplete);
+    localStorage.setItem("showComplete", json);
+  }, [showComplete]);
+
+
   const checkItem = () => {
     if (todo.replace(/ /g, '').length<5) {
       setErrorMessage('Item must contain atleast 5 letters');
@@ -46,6 +64,7 @@ const App = () => {
       submit=true;
     }
   };
+
 
   const handleSubmit = () => {
     if (submit){
@@ -62,10 +81,12 @@ const App = () => {
     }
   }
 
+
   function deleteTodo(id) {
     let updatedTodos = [...todos].filter((todo) => todo.id !== id);
     setTodos(updatedTodos);
   }
+
 
   function toggleComplete(id) {
     let updatedTodos = [...todos].map((todo) => {
@@ -85,6 +106,7 @@ const App = () => {
     setTodos(updatedTodos);
   }
 
+
 const removeCompleted = () => {
     const updatedTodos = todos.filter((item) => {
       return !item.completed === true;
@@ -96,6 +118,7 @@ const removeCompleted = () => {
 
       setShowComplete(updatedList);
   };
+
 
   return (
     <div className='flex-container'>
